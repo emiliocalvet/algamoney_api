@@ -47,5 +47,4 @@ public class CategoriaResource {
   public void removerPeloCodigo(@PathVariable Long codigo) {
     categoriaService.removePeloCodigo(codigo);
   }
-
 }

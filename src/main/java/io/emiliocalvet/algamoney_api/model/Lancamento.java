@@ -2,7 +2,6 @@ package io.emiliocalvet.algamoney_api.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,8 +25,10 @@ public class Lancamento {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long codigo;
 
+  @NotNull
   private String descricao;
 
+  @NotNull
   @Column(name = "data_vencimento")
   @JsonFormat(pattern =  "dd/MM/yyyy")
   private LocalDate dataVencimento;
@@ -35,17 +37,21 @@ public class Lancamento {
   @JsonFormat(pattern =  "dd/MM/yyyy")
   private LocalDate dataPagamento;
 
+  @NotNull
   private BigDecimal valor;
 
-  private String obseracao;
+  private String observacao;
 
+  @NotNull
   @Enumerated(EnumType.STRING)
   private TipoLancamento tipo;
 
+  @NotNull
   @ManyToOne
   @JoinColumn(name = "codigo_categoria")
   private Categoria categoria;
 
+  @NotNull
   @ManyToOne
   @JoinColumn(name = "codigo_pessoa")
   private Pessoa pessoa;
@@ -90,12 +96,12 @@ public class Lancamento {
     this.valor = valor;
   }
 
-  public String getObseracao() {
-    return this.obseracao;
+  public String getObservacao() {
+    return this.observacao;
   }
 
-  public void setObseracao(String obseracao) {
-    this.obseracao = obseracao;
+  public void setObservacao(String observacao) {
+    this.observacao = observacao;
   }
 
   public TipoLancamento getTipo() {
@@ -123,19 +129,28 @@ public class Lancamento {
   }
 
   @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Lancamento)) {
-            return false;
-        }
-        Lancamento lancamento = (Lancamento) o;
-        return Objects.equals(codigo, lancamento.codigo);
-  }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(codigo);
-  }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Lancamento other = (Lancamento) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
+	}
 
 }
