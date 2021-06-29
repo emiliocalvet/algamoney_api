@@ -21,10 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 import io.emiliocalvet.algamoney_api.event.RecursoCriadoEvent;
 import io.emiliocalvet.algamoney_api.model.Pessoa;
 import io.emiliocalvet.algamoney_api.repository.PessoaRepository;
+import io.emiliocalvet.algamoney_api.service.PessoaService;
+
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaResource {
+
+  @Autowired
+  private PessoaService pessoaService;
 
   @Autowired
   private PessoaRepository pessoaRepository;
@@ -44,7 +50,7 @@ public class PessoaResource {
   }
 
   @PostMapping
-  public ResponseEntity<?> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
+  public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
     Pessoa pessoaSalva = pessoaRepository.save(pessoa);
     publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
     return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
@@ -54,5 +60,17 @@ public class PessoaResource {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void removerPeloCodigo(@PathVariable Long codigo) {
     pessoaRepository.deleteById(codigo);
+  }
+
+  @PutMapping("/{codigo}")
+  public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
+    Pessoa pessoaSalva = pessoaService.atualizar(codigo, pessoa);
+    return ResponseEntity.ok(pessoaSalva);
+  }
+
+  @PutMapping("/{codigo}/ativo")
+  public ResponseEntity<?> atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+    pessoaService.atualizarPropriedadeAtivo(codigo, ativo);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }
