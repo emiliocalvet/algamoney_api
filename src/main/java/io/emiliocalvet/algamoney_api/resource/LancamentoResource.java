@@ -9,8 +9,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +39,8 @@ public class LancamentoResource {
   private MessageSource messageSource;
 
   @GetMapping
-  public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
-    return lancamentoService.pesquisar(lancamentoFilter);
+  public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
+    return lancamentoService.filtrar(lancamentoFilter, pageable);
   }
 
   @GetMapping("/{codigo}")
@@ -50,6 +53,12 @@ public class LancamentoResource {
   public ResponseEntity<Lancamento> criar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response){
     Lancamento lancamentoSalvo = lancamentoService.criar(lancamento, response);
     return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
+  }
+
+  @DeleteMapping("/{codigo}")
+  public ResponseEntity<?> remover(@PathVariable Long codigo) {
+    lancamentoService.remover(codigo);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   @ExceptionHandler({ PessoaInexistenteOuInativaException.class })

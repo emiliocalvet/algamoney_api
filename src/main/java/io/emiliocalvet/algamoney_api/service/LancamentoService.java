@@ -1,12 +1,12 @@
 package io.emiliocalvet.algamoney_api.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import io.emiliocalvet.algamoney_api.event.RecursoCriadoEvent;
@@ -19,7 +19,7 @@ import io.emiliocalvet.algamoney_api.service.exception.PessoaInexistenteOuInativ
 
 @Service
 public class LancamentoService {
-  
+
   @Autowired
   private LancamentoRepository lancamentoRepository;
 
@@ -29,8 +29,8 @@ public class LancamentoService {
   @Autowired
   private ApplicationEventPublisher publisher;
 
-  public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
-    return lancamentoRepository.filtrar(lancamentoFilter);
+  public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable) {
+    return lancamentoRepository.filtrar(lancamentoFilter, pageable);
   }
 
   public Lancamento buscarPeloCodigo(Long codigo) {
@@ -49,5 +49,9 @@ public class LancamentoService {
     Lancamento lancamentoSalvo = lancamentoRepository.save(lancamento);
     publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
     return lancamentoSalvo;
+  }
+
+  public void remover(Long codigo) {
+    lancamentoRepository.deleteById(codigo);
   }
 }
