@@ -54,6 +54,7 @@ INSERT INTO pessoa (
   'Ceará',
   1
 );
+
 INSERT INTO pessoa (
   nome,
   logradouro,
@@ -97,6 +98,7 @@ INSERT INTO pessoa (
   'Ceará',
   1
 );
+
 INSERT INTO pessoa (
   nome,
   logradouro,
@@ -134,6 +136,7 @@ INSERT INTO pessoa (
   'Ceará',
   1
 );
+
 INSERT INTO pessoa (
   nome,
   logradouro,
