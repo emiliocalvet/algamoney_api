@@ -15,6 +15,7 @@ import io.emiliocalvet.algamoney_api.model.Pessoa;
 import io.emiliocalvet.algamoney_api.repository.LancamentoRepository;
 import io.emiliocalvet.algamoney_api.repository.PessoaRepository;
 import io.emiliocalvet.algamoney_api.repository.filter.LancamentoFilter;
+import io.emiliocalvet.algamoney_api.repository.projection.ResumoLancamento;
 import io.emiliocalvet.algamoney_api.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
@@ -31,6 +32,10 @@ public class LancamentoService {
 
   public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable) {
     return lancamentoRepository.filtrar(lancamentoFilter, pageable);
+  }
+
+  public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+    return lancamentoRepository.resumir(lancamentoFilter, pageable);
   }
 
   public Lancamento buscarPeloCodigo(Long codigo) {
