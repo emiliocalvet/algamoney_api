@@ -24,8 +24,6 @@ public class CorsFilter implements Filter {
   @Autowired
   private AlgamoneyApiProperty algamoneyApiProperty;
 
-  private String originPermitida = algamoneyApiProperty.getOriginPermitida();
-
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
@@ -36,7 +34,7 @@ public class CorsFilter implements Filter {
     res.setHeader("Access-Control-Allow-Origin", algamoneyApiProperty.getOriginPermitida());
     res.setHeader("Access-Control-Allow-Credentials", "true");
 
-    if ("OPTIONS".equals(req.getMethod()) && originPermitida.equals(req.getHeader("Origin"))) {
+    if ("OPTIONS".equals(req.getMethod()) && algamoneyApiProperty.getOriginPermitida().equals(req.getHeader("Origin"))) {
       res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, PATCH, OPTIONS");
       res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
       res.setHeader("Access-Control-Max-Age", "3600");
