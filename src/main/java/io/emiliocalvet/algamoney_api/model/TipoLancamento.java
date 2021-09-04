@@ -1,7 +1,6 @@
 package io.emiliocalvet.algamoney_api.model;
 
-public enum TipoLancamento {
-  
+public enum TipoLancamento { 
   RECEITA,
   DESPESA
 }
